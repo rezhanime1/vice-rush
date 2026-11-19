@@ -1,61 +1,124 @@
-// Every tuning number and colour in one place. The playfield is a fixed 1280x720 logical area;
-// the renderer scales it to the window, so no rule below depends on the screen size.
+// Vice Rush — every tuning number, colour and city constant in one place.
+// The world is a fixed 2560x1920 logical city; the renderer scales a camera view
+// of it to the window, so no rule below depends on the screen size.
 
-export const FIELD = { width: 1280, height: 720, groundY: 664 };
+export const WORLD = { width: 2560, height: 1920 };
 
 /** The simulation's fixed step, in seconds: 60 updates a second whatever the display's rate. */
 export const STEP = 1 / 60;
 
+/** Road grid: vertical and horizontal road centrelines, road width and lane offset. */
+export const ROADS = {
+  vertical: [320, 640, 960, 1280, 1600, 1920, 2240],
+  horizontal: [320, 640, 960, 1280, 1600],
+  width: 96,
+  lane: 24,
+};
+
+/** The beach strip along the south edge: sand, then water at the very bottom. */
+export const BEACH = { sandY: 1760, waterY: 1872 };
+
+/** Named places the missions and the minimap point at. */
+export const PLACES = {
+  hideout: { x: 1120, y: 480, label: 'Hideout' },
+  docks: { x: 200, y: 1470, label: 'The Docks' },
+  motel: { x: 2360, y: 1120, label: 'Motel Palm' },
+  bank: { x: 1440, y: 800, label: 'Bank of Solmar' },
+  park: { x: 1120, y: 800, label: 'Coral Park' },
+  spray: { x: 800, y: 200, label: 'Fresh Coat' },
+  port: { x: 480, y: 1600, label: 'Port Gate' },
+  hospital: { x: 1760, y: 480, label: 'St. Lumen Hospital' },
+};
+
 export const PLAYER = {
-  width: 72,
-  height: 24,
-  speed: 560,
-  invulnerable: 1.5,
+  radius: 13,
+  walkSpeed: 210,
+  runSpeed: 320,
+  health: 100,
+  punchRange: 34,
+  punchDamage: 25,
+  punchCooldown: 0.45,
 };
 
-export const LIVES = 3;
-
-export const BLOCK = {
-  minWidth: 40,
-  maxWidth: 110,
-  height: 36,
-  speed: 240,
-  speedPerLevel: 30,
-  speedJitter: 90,
-  interval: 0.55,
-  intervalScale: 0.88,
-  minInterval: 0.14,
-  dodgePoints: 1,
+export const PISTOL = {
+  damage: 34,
+  range: 520,
+  bulletSpeed: 900,
+  magSize: 12,
+  reloadTime: 1.1,
+  fireCooldown: 0.22,
+  spread: 0.045,
 };
 
-export const COIN = {
-  size: 24,
-  speed: 190,
-  speedPerLevel: 14,
-  interval: 1.4,
-  intervalJitter: 0.8,
-  points: 10,
+export const CAR = {
+  length: 46,
+  width: 22,
+  accel: 420,
+  brake: 700,
+  reverseMax: 150,
+  maxSpeed: 520,
+  sportsMax: 640,
+  turnRate: 2.6,
+  grip: 6.0,
+  handbrakeGrip: 1.6,
+  health: 100,
 };
 
-/** Seconds of play per level, and the last level: speeds and spawn rates stop growing there. */
-export const LEVEL = { seconds: 12, max: 12 };
+export const TRAFFIC = { count: 20, speed: 150, speedJitter: 40, followGap: 70 };
 
-/** How many falling things can exist at once; the pool is allocated once, at boot. */
-export const POOL_SIZE = 64;
+export const PEDS = { count: 32, speed: 55, fleeSpeed: 130 };
+
+export const POLICE = {
+  carSpeed: 560,
+  carTurn: 3.1,
+  footSpeed: 235,
+  bustTime: 1.5,
+  ramDamage: 8,
+  spawnDistance: 700,
+};
+
+export const WANTED = {
+  maxStars: 5,
+  stealCar: 25,
+  hitPed: 30,
+  shoot: 20,
+  killPed: 45,
+  killCop: 80,
+  decayPerSecond: 3.5,
+  decayDelay: 6,
+};
+
+export const MONEY = { sprayCost: 200, bustedLoss: 0.2, wastedLoss: 0.2 };
 
 export const PALETTE = {
-  backdrop: '#11141b',
-  sky: '#1b1f2a',
-  ground: '#2a3040',
-  player: '#4fc3f7',
-  block: '#e5534b',
-  coin: '#f2c94c',
-  panel: '#252b38',
-  text: '#eef1f5',
-  muted: '#8b93a3',
+  backdrop: '#1a2233',
+  grass: '#7fae62',
+  parkGrass: '#69a357',
+  sand: '#eed9a4',
+  water: '#2f9dc4',
+  waterDeep: '#1f7ea8',
+  sidewalk: '#cfc0a0',
+  road: '#3c414d',
+  roadLine: '#e8c84a',
+  curb: '#9a8c6c',
+  buildingRoof: '#8a6f5c',
+  text: '#f4f1e8',
+  muted: '#b9b3a4',
+  panel: 'rgba(16, 20, 30, 0.82)',
+  accent: '#ffb02e',
+  danger: '#ff5252',
+  policeBlue: '#3f8cff',
+  policeRed: '#ff4040',
+  mission: '#ffd23e',
+  health: '#58d68d',
+  cash: '#7be495',
 };
 
-export const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+/** Pastel roof colours for the city's buildings. */
+export const ROOF_COLORS = ['#e8a798', '#a8c8a0', '#a0b8d8', '#e8c89a', '#d8a0c0', '#b8a8d8', '#f0b890', '#98d0c0'];
 
-/** Where the best score is kept between visits (this browser only). */
-export const BEST_KEY = 'block-dodger.best';
+export const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+
+/** Where the save (cash, mission progress, best) is kept between visits (this browser only). */
+export const SAVE_KEY = 'vice-rush.save.v1';
+export const BEST_KEY = 'vice-rush.best.v1';
